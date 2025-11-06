@@ -33,7 +33,7 @@ const Signup = () => {
     >
       <h1>Signup</h1>
 
-      <ul className="" style={{ listStyle: "none" }}>
+      <ul className="">
         <li>
           <input
             type="text"
