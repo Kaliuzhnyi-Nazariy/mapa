@@ -7,6 +7,7 @@ import db from "./db/db";
 import initTablesDB from "./db/createDBs";
 import authRoutes from "./routes/auth";
 import errorRoute from "./routes/error";
+import path from "path";
 
 dotenv.config();
 
@@ -30,6 +31,13 @@ app.use("/api/auth", authRoutes);
 
 app.use(errorRoute);
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+  app.all("/{*any}", (_req, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend/dist/index.html"));
+  });
+}
 db.connect()
   .then(() => {
     initTablesDB().then(() => {
