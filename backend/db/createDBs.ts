@@ -1,6 +1,8 @@
 import db from "./db";
 
 const initTablesDB = async () => {
+  await db.query(`DROP TABLE Users CASCADE;`);
+
   await db.query(`
 DROP DOMAIN IF EXISTS not_empty;
 CREATE DOMAIN not_empty AS varchar(128)
