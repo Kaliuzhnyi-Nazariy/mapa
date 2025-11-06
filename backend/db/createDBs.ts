@@ -2,6 +2,8 @@ import db from "./db";
 
 const initTablesDB = async () => {
   await db.query(`
+  CREATE DOMAIN not_empty AS varchar(128) CHECK (LENGTH(TRIM(VALUE)) > 0);
+
   CREATE TABLE IF NOT EXISTS Users (
   id SERIAL NOT NULL,
   name not_empty NOT NULL,
