@@ -4,8 +4,8 @@
   "main": "server.ts",
   "scripts": {
     "dev": "nodemon server.ts",
-    "build": "tsc && cd .. && cd frontend && npm run build",
-    "start": "node dist/server.js"
+    "build": "tsc && cd .. && cd frontend && npm install && npm run build",
+    "start": "set NODE_ENV=production && node dist/server.js"
   },
   "keywords": [],
   "author": "",
