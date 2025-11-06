@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "server.ts",
   "scripts": {
-    "dev": "nodemon server.ts"
+    "dev": "nodemon server.ts",
+    "build": "tsc && cd .. && cd frontend && npm run build",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
