@@ -32,7 +32,7 @@ app.use("/api/auth", authRoutes);
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-  app.all("/{*any}", (_req, res) => {
+  app.all("*", (_req, res) => {
     res.setHeader(
       "Content-Security-Policy",
       [
