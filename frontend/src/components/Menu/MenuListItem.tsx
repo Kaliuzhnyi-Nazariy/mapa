@@ -19,7 +19,7 @@ const MenuListItem = ({
   itemRefs: React.RefObject<Record<string, HTMLLIElement | null>>;
   um: Marker;
   // id?: number | null;
-  id?: string | null;
+  id?: number | null;
   mapRef: React.RefObject<Map | null>;
   closeMenu?: () => void;
   openEdit: ({

@@ -2,13 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import MenuListItem from "./MenuListItem";
 import { useSelector } from "react-redux";
 import { markers } from "../../redux/marker/selector";
+import { Map } from "mapbox-gl";
 
 const SideMenu = ({
   mapRef,
   id,
   openEdit,
-  extraStyles,
-}: {
+}: // extraStyles,
+{
   mapRef: React.RefObject<Map | null>;
   id?: number | null;
   openEdit: ({
@@ -22,7 +23,7 @@ const SideMenu = ({
     lng: number;
     lat: number;
   }) => void;
-  extraStyles?: string;
+  // extraStyles?: string;
 }) => {
   const userMarkers = useSelector(markers);
   const itemRefs = useRef<Record<string, HTMLLIElement | null>>({});
@@ -67,7 +68,7 @@ const SideMenu = ({
                 key={um.id}
                 um={um}
                 mapRef={mapRef}
-                id={chosenMarker}
+                id={Number(chosenMarker)}
                 // id={id}
                 itemRefs={itemRefs}
                 openEdit={openEdit}

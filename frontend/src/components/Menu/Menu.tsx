@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Locations from "../Map/Locations";
 import { useSelector } from "react-redux";
 import { markers } from "../../redux/marker/selector";
-import { moveToMarker } from "../Map/locationsRequests";
 import { Map } from "mapbox-gl";
 import MenuListItem from "./MenuListItem";
 // import { useInitMap } from "../Map/initMap";
@@ -15,8 +14,8 @@ const Menu = ({
   restMarker,
   lngLat,
   openEdit,
-  extraStyles,
-}: {
+}: // extraStyles,
+{
   mapRef: React.RefObject<Map | null>;
   menuTrigger?: boolean;
   id?: number | null;
@@ -35,7 +34,7 @@ const Menu = ({
     lng: number;
     lat: number;
   }) => void;
-  extraStyles?: string;
+  // extraStyles?: string;
 }) => {
   // const Menu = () => {
   // const { mapRef } = useInitMap();
@@ -81,9 +80,12 @@ const Menu = ({
 
   return (
     <div
-      className={`overflow-hidden w-full relative hidden min-[768px]:block ${
-        extraStyles && extraStyles
-      }`}
+      className={
+        `overflow-hidden w-full relative hidden min-[768px]:block  `
+        // ${
+        // extraStyles && extraStyles
+        // }
+      }
     >
       <div className="fixed h-15 bg-orange-500 w-full top-0 left-0 z-10 flex justify-between items-center px-10 min-[1440px]:relative min-[1440px]:h-22">
         {/* <div className="bg-orange-500 w-full h-full flex justify-between items-center"></div> */}
