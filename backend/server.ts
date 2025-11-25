@@ -6,6 +6,8 @@ import { ajMiddleware } from "./middlewares";
 import db from "./db/db";
 import initTablesDB from "./db/createDBs";
 import authRoutes from "./routes/auth";
+import markerRoutes from "./routes/markers";
+import userRoutes from "./routes/user";
 import errorRoute from "./routes/error";
 import path from "path";
 
@@ -28,6 +30,10 @@ app.use(cookieParser());
 app.use(ajMiddleware);
 
 app.use("/api/auth", authRoutes);
+
+app.use("/api/marker", markerRoutes);
+
+app.use("/api/user", userRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
