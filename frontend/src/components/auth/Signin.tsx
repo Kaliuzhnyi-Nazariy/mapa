@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useAppDispatch } from "../../redux/dispatch";
-import { signup } from "../../redux/user/authRequests";
+import { signin } from "../../redux/user/authRequests";
 import { useSelector } from "react-redux";
 import { userLoading } from "../../redux/user/selectors";
 
-const Signup = () => {
+const Signin = () => {
   const dispatch = useAppDispatch();
 
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,9 +15,9 @@ const Signup = () => {
   const isLoading = useSelector(userLoading);
 
   const onSubmit = () => {
-    if (!name || !email || !password) return;
+    if (!email || !password) return;
 
-    dispatch(signup({ name, email, password }));
+    dispatch(signin({ email, password }));
   };
 
   const liStyle =
@@ -37,18 +36,6 @@ const Signup = () => {
         className=""
       >
         <ul className="flex flex-col gap-3">
-          <li className={liStyle}>
-            <label htmlFor="">
-              <h3>Name:</h3>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className={inputStyle}
-                disabled={isLoading}
-              />
-            </label>
-          </li>
           <li className={liStyle}>
             <label htmlFor="">
               <h3>Email: </h3>
@@ -88,13 +75,13 @@ const Signup = () => {
 
         <button
           className="disabled:opacity-50 mt-4 w-full py-2 bg-orange-500 text-white"
-          disabled={!name || !email || !password || isLoading}
+          disabled={!email || !password || isLoading}
         >
-          {isLoading ? "Loading..." : "Signup"}
+          {isLoading ? "Loading..." : "Signin"}
         </button>
       </form>
     </>
   );
 };
 
-export default Signup;
+export default Signin;
