@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { signin, signout, signup } from "./authRequests";
+import { getMe } from "./userRequests";
 
 interface UserInitialState {
   user: {
@@ -9,6 +10,7 @@ interface UserInitialState {
   isLoading: boolean;
   isLoggedIn: boolean;
   error: string | null;
+  isRefreshing: boolean;
 }
 
 const initialState: UserInitialState = {
@@ -19,6 +21,7 @@ const initialState: UserInitialState = {
   isLoading: false,
   isLoggedIn: false,
   error: null,
+  isRefreshing: false,
 };
 
 const pendingHandler = (state: UserInitialState) => {
@@ -74,7 +77,33 @@ const userSlice = createSlice({
         state.isLoading = initialState.isLoading;
         state.isLoggedIn = initialState.isLoggedIn;
       })
-      .addCase(signout.rejected, rejectionHandler);
+      .addCase(signout.rejected, rejectionHandler)
+
+      .addCase(getMe.pending, (state: UserInitialState) => {
+        state.isRefreshing = true;
+      })
+      .addCase(
+        getMe.fulfilled,
+        (
+          state: UserInitialState,
+          action: PayloadAction<{ name: string; email: string }>
+        ) => {
+          console.log(action.payload);
+          state.user = action.payload;
+          state.isRefreshing = false;
+          state.isLoggedIn = true;
+        }
+      )
+      .addCase(
+        getMe.rejected,
+        (
+          state: UserInitialState,
+          action: PayloadAction<{ message: string } | undefined>
+        ) => {
+          state.isRefreshing = true;
+          state.error = action.payload?.message ?? "Unexpected error occurred";
+        }
+      );
   },
 });
 

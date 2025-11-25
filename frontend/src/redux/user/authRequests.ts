@@ -1,20 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../api.config";
 import axios from "axios";
-
-export interface ReturnUser {
-  name: string;
-  email: string;
-}
-
-export interface SignInUser {
-  email: string;
-  password: string;
-}
-
-export interface SignUpUser extends SignInUser {
-  name: string;
-}
+import type { ReturnUser, SignInUser, SignUpUser } from "./userTypes";
 
 export const signup = createAsyncThunk<
   ReturnUser,
@@ -41,6 +28,7 @@ export const signin = createAsyncThunk<
   { rejectValue: { message: string } }
 >("auth/signin", async (data, { rejectWithValue }) => {
   try {
+    console.log({ data });
     const res = await api.post("/auth/signin", data, { withCredentials: true });
     return res.data;
   } catch (error) {
