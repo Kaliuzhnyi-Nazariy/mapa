@@ -17,5 +17,5 @@ export default defineConfig({
       protocol: "http",
     },
   },
-  base: "/",
+  // base: "/",
 });
