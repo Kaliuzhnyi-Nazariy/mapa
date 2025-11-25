@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { userReducer } from "./user/slice";
+import { markerReducer } from "./marker/slice";
 
 const store = configureStore({
   reducer: {
     user: userReducer,
+    markers: markerReducer,
   },
 });
 
