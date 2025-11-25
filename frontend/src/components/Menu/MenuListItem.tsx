@@ -40,7 +40,11 @@ const MenuListItem = ({
 
   return (
     <li
-      ref={(el) => (itemRefs.current[um.id] = el)}
+      ref={(el) => {
+        if (el) {
+          itemRefs.current[um.id] = el;
+        }
+      }}
       className={`border rounded-2xl p-2 transition-colors duration-300 ${
         id && String(id) == um.id && "bg-orange-500 text-white"
       }`}

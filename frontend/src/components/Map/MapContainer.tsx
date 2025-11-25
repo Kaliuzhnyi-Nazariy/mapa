@@ -73,14 +73,18 @@ export const MapContainer = () => {
     if (!mapRef.current) return;
 
     const handleClick = (e: mapboxgl.MapMouseEvent) => {
-      const isClickData = e.originalEvent.target
+      const target = e.originalEvent.target as HTMLElement | null;
+
+      const isClickData = target
         ?.closest("div")
         ?.classList.contains("mapboxgl-marker");
 
       if (isClickData) {
-        const clickData = e.originalEvent.target?.closest("div");
-        console.log(clickData);
-        console.log("clicking id: ", clickData.getAttribute("marker_id"));
+        const clickData = target?.closest("div");
+        // console.log(clickData);
+        // console.log("clicking id: ", clickData.getAttribute("marker_id"));
+        if (!clickData) return;
+
         const id = clickData.getAttribute("marker_id");
 
         const typeOfMarker = clickData.getAttribute("marker_type");
@@ -90,7 +94,7 @@ export const MapContainer = () => {
         }
 
         openMenu();
-        setMarker(id);
+        setMarker(Number(id));
 
         return;
       }
@@ -185,7 +189,7 @@ export const MapContainer = () => {
         mapRef={mapRef}
         id={chosenMarker}
         openEdit={openEdit}
-        extraStyles="col-start-1 col-end-3 row-start-1"
+        // extraStyles="col-start-1 col-end-3 row-start-1"
       />
 
       <div
