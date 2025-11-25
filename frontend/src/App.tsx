@@ -16,7 +16,8 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter basename="https://mapa-app.onrender.com">
+    <BrowserRouter basename="/">
+      {/* <BrowserRouter basename="https://mapa-app.onrender.com"> */}
       <Routes>
         <Route path="/" element={<GreetingPage />} />
         <Route

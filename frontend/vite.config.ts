@@ -17,5 +17,6 @@ export default defineConfig({
       protocol: "http",
     },
   },
-  base: "https://mapa-app.onrender.com",
+  base: "/",
+  // base: "https://mapa-app.onrender.com",
 });
