@@ -63,12 +63,12 @@ const Menu = ({
   const itemRefs = useRef<Record<string, HTMLLIElement | null>>({});
 
   useEffect(() => {
-    console.log(id);
+    // console.log(id);
     if (!id) return;
 
     const el = itemRefs.current[String(id)];
 
-    console.log(el);
+    // console.log(el);
 
     if (el) {
       el.scrollIntoView({

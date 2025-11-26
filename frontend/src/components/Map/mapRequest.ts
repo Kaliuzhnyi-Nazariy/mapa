@@ -19,7 +19,7 @@ export function useNearMe() {
           }`
         );
 
-        console.log(res.data.features);
+        // console.log(res.data.features);
 
         setLocations(res.data.features);
         return res.data.features;

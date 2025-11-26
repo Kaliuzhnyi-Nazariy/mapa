@@ -88,7 +88,7 @@ const userSlice = createSlice({
           state: UserInitialState,
           action: PayloadAction<{ name: string; email: string }>
         ) => {
-          console.log(action.payload);
+          // console.log(action.payload);
           state.user = action.payload;
           state.isRefreshing = false;
           state.isLoggedIn = true;
@@ -100,7 +100,7 @@ const userSlice = createSlice({
           state: UserInitialState,
           action: PayloadAction<{ message: string } | undefined>
         ) => {
-          state.isRefreshing = true;
+          state.isRefreshing = false;
           state.error = action.payload?.message ?? "Unexpected error occurred";
         }
       );

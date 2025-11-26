@@ -17,10 +17,6 @@ export const isAuthenticated = async (
   res: Response,
   next: NextFunction
 ) => {
-  // console.log("headers: ", req.headers["set-cookie"]);
-  // console.log("cookies: ", req.cookies);
-  // console.log("cookies token: ", req.cookies.token);
-
   const tokenCookie = req.cookies.token;
   if (!tokenCookie) {
     return next(errorHandler(401, "No token!"));

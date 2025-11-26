@@ -10,7 +10,7 @@ export const getMe = createAsyncThunk<
 >("/user/getMe", async (_, { rejectWithValue }) => {
   try {
     const res = await api.get("/user/me");
-    console.log(res);
+    // console.log(res);
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

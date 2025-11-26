@@ -77,7 +77,7 @@ const updateMarker = async (
 
   const { markerName, position } = req.body;
 
-  console.log({ markerName, position, id, markerId });
+  // console.log({ markerName, position, id, markerId });
 
   const { rows } = await db.query(
     "UPDATE Map_markers SET name=$1, position=$2 WHERE owner_id=$3 AND id=$4 RETURNING *",

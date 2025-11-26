@@ -12,7 +12,7 @@ export const generateNewMarker = ({
   lng: number;
   lat: number;
   map: Map;
-  type?: string;
+  type?: "users" | "found" | "me";
   name?: string;
   openEdit?: ({
     name,
@@ -112,9 +112,9 @@ export const generateNewMarker = ({
     }
 
     btn.addEventListener("click", () => {
-      console.log({ openEdit, name, id, lat, lng });
+      // console.log({ openEdit, name, id, lat, lng });
       if (openEdit && name && id && lng && lat) {
-        console.log("inside click: ", { name, id, lng, lat });
+        // console.log("inside click: ", { name, id, lng, lat });
 
         openEdit({ name, id, lng, lat });
       }
@@ -139,16 +139,15 @@ export const removeMarkers = ({
   const markers = map.current?._markers;
 
   if (markerId) {
-    console.log("markerId triggered");
+    // console.log("markerId triggered");
     markers?.forEach((um) => {
       const id = um._element.getAttribute("marker_id");
       if (Number(id) === Number(markerId)) {
         um.remove();
-        console.log("removed");
       }
     });
   } else if (type) {
-    console.log("type triggered");
+    // console.log("type triggered");
     const filteredMarkers = markers?.filter(
       (m) => m._element.getAttribute("marker_type") == type
     );

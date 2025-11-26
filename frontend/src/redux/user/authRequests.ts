@@ -13,7 +13,6 @@ export const signup = createAsyncThunk<
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      // console.log(error);
       return rejectWithValue({
         message: error.response?.data?.message || "Signin failed",
       });
@@ -28,7 +27,7 @@ export const signin = createAsyncThunk<
   { rejectValue: { message: string } }
 >("auth/signin", async (data, { rejectWithValue }) => {
   try {
-    console.log({ data });
+    // console.log({ data });
     const res = await api.post("/auth/signin", data, { withCredentials: true });
     return res.data;
   } catch (error) {
