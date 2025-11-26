@@ -222,6 +222,7 @@ export const MapContainer = () => {
         lat={editLat}
         lng={editLng}
         map={mapRef}
+        openEdit={openEdit}
       />
     </div>
   );

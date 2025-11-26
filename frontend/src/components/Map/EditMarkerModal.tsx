@@ -7,8 +7,10 @@ import {
   getMarkers,
   updateMarker,
 } from "../../redux/marker/request";
-import { removeMarkers } from "./useMap";
+import { generateNewMarker, removeMarkers } from "./useMap";
 import type { Map } from "mapbox-gl";
+import { customToast } from "../../toasts/toast";
+import type { Marker } from "../../types/markers";
 
 const EditMarkerModal = ({
   isModalOpen,
@@ -18,6 +20,7 @@ const EditMarkerModal = ({
   lat,
   lng,
   map,
+  openEdit,
 }: {
   isModalOpen: boolean;
   closeModal: () => void;
@@ -26,6 +29,17 @@ const EditMarkerModal = ({
   lat: number | null;
   lng: number | null;
   map: React.RefObject<Map | null>;
+  openEdit?: ({
+    name,
+    id,
+    lng,
+    lat,
+  }: {
+    name: string;
+    id: string;
+    lng: number;
+    lat: number;
+  }) => void;
 }) => {
   const [newName, setNewName] = useState("");
 
@@ -52,9 +66,24 @@ const EditMarkerModal = ({
       })
     );
 
+    removeMarkers({ map, markerId: id });
+
+    generateNewMarker({
+      lat,
+      lng,
+      map: map.current!,
+      type: "users",
+      name: newName,
+      openEdit,
+      id,
+    });
+
     if (res.meta.requestStatus === "fulfilled") {
       dispatch(getMarkers());
       closeModal();
+      customToast("suc", `${name} marker updated!`);
+    } else {
+      customToast("err", "Sth went wrong!");
     }
   };
 
@@ -62,12 +91,20 @@ const EditMarkerModal = ({
     if (!id) return;
     const res = await dispatch(deleteMarker({ markerId: id }));
 
-    console.log(res);
+    // console.log(res);
 
     if (res.meta.requestStatus === "fulfilled") {
-      console.log(id);
+      // console.log(id);
       removeMarkers({ map, markerId: id });
       closeModal();
+
+      const resData: Marker | { message: string } | undefined = res.payload;
+
+      if (resData && "name" in resData) {
+        customToast("suc", `'${resData && resData.name}' marker deleted!`);
+      }
+    } else {
+      customToast("err", "Sth went wrong!");
     }
   };
 
