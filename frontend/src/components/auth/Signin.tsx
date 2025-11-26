@@ -2,7 +2,10 @@ import { useState } from "react";
 import { useAppDispatch } from "../../redux/dispatch";
 import { signin } from "../../redux/user/authRequests";
 import { useSelector } from "react-redux";
-import { userLoading } from "../../redux/user/selectors";
+import { userLoading, username } from "../../redux/user/selectors";
+import { customToast } from "../../toasts/toast";
+import { Eye, EyeClosed } from "lucide-react";
+import type { ReturnUser } from "../../redux/user/userTypes";
 
 const Signin = () => {
   const dispatch = useAppDispatch();
@@ -13,11 +16,24 @@ const Signin = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const isLoading = useSelector(userLoading);
+  const user = useSelector(username);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!email || !password) return;
 
-    dispatch(signin({ email, password }));
+    const res = await dispatch(signin({ email, password }));
+
+    if (res.meta.requestStatus == "fulfilled") {
+      customToast("suc", `Welcome back, ${user}!`);
+    } else if (res.meta.requestStatus == "rejected") {
+      const resData: ReturnUser | { message: string } | undefined = res.payload;
+
+      if (resData && "message" in resData) {
+        customToast("err", resData.message);
+      } else {
+        customToast("err", "Unexpected error");
+      }
+    }
   };
 
   const liStyle =
@@ -63,10 +79,10 @@ const Signin = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute top-1/2 -translate-y-1/2 right-1 size-5 bg-red-500"
+                  className="absolute top-1/2 -translate-y-1/2 right-1 size-5"
                   disabled={isLoading}
                 >
-                  {showPassword ? "s" : "ns"}
+                  {showPassword ? <Eye /> : <EyeClosed />}
                 </button>
               </div>
             </label>
