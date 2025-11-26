@@ -15,14 +15,31 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password)
-    next(errorHandler(400, "All fields should be filled!"));
+    return next(errorHandler(400, "All fields should be filled!"));
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const { rows } = await db.query(
-    "INSERT INTO Users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email;",
-    [name, email, hashedPassword]
-  );
+  let data;
+
+  try {
+    data = await db.query(
+      "INSERT INTO Users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email;",
+      [name, email, hashedPassword]
+    );
+  } catch (error: unknown) {
+    const errDetail = (error as { detail: string }).detail;
+    if (errDetail.split(" ").includes("already")) {
+      return next(
+        errorHandler(409, "User with that credential is already exist!")
+      );
+    } else {
+      return next(errorHandler(500, errDetail));
+    }
+  }
+
+  if (!data) return errorHandler(500, "Sth went wrong!");
+
+  const { rows } = data;
 
   const payload = {
     id: rows[0].id,
