@@ -2,6 +2,7 @@ import type { LngLatLike, Map } from "mapbox-gl";
 import type React from "react";
 import { generateNewMarker } from "./useMap";
 import type { Dispatch } from "react";
+import { customToast } from "../../toasts/toast";
 
 export const getLocation = (
   mapRef: React.RefObject<Map | null>,
@@ -52,10 +53,12 @@ export const getLocation = (
         lng: position.coords.longitude,
       },
     });
+
+    customToast("suc", "We found you!");
   };
 
-  const errCalback = () => {
-    console.log("error");
+  const errCalback = (err: { message: string }) => {
+    customToast("err", err.message);
     return;
   };
 
@@ -66,9 +69,10 @@ export const moveToMarker = (
   mapRef: React.RefObject<Map | null>,
   locationCoords: { lng: number; lat: number }
 ) => {
-  console.log(!mapRef);
+  // console.log(!mapRef);
   if (!mapRef) {
-    console.log("no map");
+    // console.log("no map");
+    customToast("err", "no map");
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   mapRef &&

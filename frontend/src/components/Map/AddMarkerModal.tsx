@@ -6,6 +6,7 @@ import { markersLoading } from "../../redux/marker/selector";
 import { generateNewMarker } from "./useMap";
 import type { Map } from "mapbox-gl";
 import type { Marker } from "../../types/markers";
+import { customToast } from "../../toasts/toast";
 
 const AddMarkerModal = ({
   isShown,
@@ -43,7 +44,7 @@ const AddMarkerModal = ({
 
   useEffect(() => {
     if (lngLat) {
-      console.log("lngLat in useEffect: ", lngLat);
+      // console.log("lngLat in useEffect: ", lngLat);
       setPlacePosition(lngLat);
     }
   }, [lngLat]);
@@ -84,6 +85,9 @@ const AddMarkerModal = ({
 
       clearFields();
       closeModal();
+      customToast("suc", `'${nameOfPlace}' marker added!`);
+    } else {
+      customToast("err", "Sth went wrong!");
     }
   };
 

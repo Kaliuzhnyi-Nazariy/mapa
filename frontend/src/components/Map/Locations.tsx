@@ -5,6 +5,7 @@ import { useNearMe } from "./mapRequest";
 import { generateNewMarker, removeMarkers } from "./useMap";
 import type { Marker } from "../../types/markers";
 import { LocateFixed, MapPinned } from "lucide-react";
+import { customToast } from "../../toasts/toast";
 
 const Locations = ({
   mapRef,
@@ -34,7 +35,8 @@ const Locations = ({
   const { loading, error, locations, getNearMeLocations } = useNearMe();
 
   if (error) {
-    console.log(error);
+    customToast("err", error);
+    // console.log(error);
   }
 
   const findNearMe = async () => {
@@ -46,7 +48,8 @@ const Locations = ({
         lat: chosenMarker.position.lat,
       });
     } else {
-      console.log("Set your location");
+      // console.log("Set your location");
+      customToast("err", "Set your location");
     }
   };
 
@@ -57,7 +60,7 @@ const Locations = ({
 
     const map = mapRef.current;
 
-    console.log("markersRef: ", markersRef);
+    // console.log("markersRef: ", markersRef);
 
     if (markersRef.current.length > 0) {
       removeMarkers({ map: mapRef });
