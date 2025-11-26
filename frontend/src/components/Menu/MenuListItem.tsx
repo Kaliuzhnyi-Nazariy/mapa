@@ -7,6 +7,7 @@ import { deleteMarker } from "../../redux/marker/request";
 import { removeMarkers } from "../Map/useMap";
 import { useSelector } from "react-redux";
 import { markersLoading } from "../../redux/marker/selector";
+import { customToast } from "../../toasts/toast";
 
 const MenuListItem = ({
   itemRefs,
@@ -37,6 +38,24 @@ const MenuListItem = ({
   const dispatch = useAppDispatch();
 
   const markerLoading = useSelector(markersLoading);
+
+  const deleteMarkerHandle = async () => {
+    const res = await dispatch(deleteMarker({ markerId: um.id }));
+    removeMarkers({ map: mapRef, markerId: um.id });
+
+    if (res.meta.requestStatus === "fulfilled") {
+      // console.log(id);
+      removeMarkers({ map: mapRef, markerId: String(id) });
+
+      const resData: Marker | { message: string } | undefined = res.payload;
+
+      if (resData && "name" in resData) {
+        customToast("suc", `'${resData && resData.name}' marker deleted!`);
+      }
+    } else {
+      customToast("err", "Sth went wrong!");
+    }
+  };
 
   return (
     <li
@@ -96,10 +115,9 @@ const MenuListItem = ({
             <button
               type="button"
               className="w-full bg-orange-500 text-white text-center"
-              onClick={async (e) => {
+              onClick={(e) => {
                 e.stopPropagation();
-                await dispatch(deleteMarker({ markerId: um.id }));
-                removeMarkers({ map: mapRef, markerId: um.id });
+                deleteMarkerHandle();
               }}
             >
               Delete
