@@ -15,6 +15,7 @@ import {
   username,
 } from "./redux/user/selectors";
 import { customToast } from "./toasts/toast";
+import NotFoundPage from "./components/NotFoundPage";
 function App() {
   const dispatch = useAppDispatch();
 
@@ -61,6 +62,7 @@ function App() {
                 <PrivateRoute component={<MapComponent />} redirectTo="/auth" />
               }
             />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
       )}
