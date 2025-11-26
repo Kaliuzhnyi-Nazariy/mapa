@@ -41,18 +41,7 @@ if (process.env.NODE_ENV === "production") {
   app.all("/{*any}", (_req, res) => {
     res.setHeader(
       "Content-Security-Policy",
-      [
-        "default-src 'self';",
-        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com;",
-        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net;",
-        "font-src 'self' https://fonts.gstatic.com;",
-        "img-src 'self' data: blob: https://*;",
-        "connect-src 'self' https://api.yourdomain.com https://*;",
-        "frame-src 'self';",
-        "object-src 'none';",
-        "base-uri 'self';",
-        "form-action 'self';",
-      ].join(" ")
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; worker-src 'self' blob:;"
     );
 
     res.sendFile(path.resolve(__dirname, "../../frontend/dist/index.html"));
