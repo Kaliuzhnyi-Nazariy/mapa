@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { markers } from "../../redux/marker/selector";
 import { Map } from "mapbox-gl";
 import MenuListItem from "./MenuListItem";
+import { MenuIcon, X } from "lucide-react";
 // import { useInitMap } from "../Map/initMap";
 
 const Menu = ({
@@ -93,7 +94,7 @@ const Menu = ({
           onClick={openMenu}
           className="min-[1440px]:hidden"
         >
-          <div className="size-10 bg-amber-50"></div>
+          <MenuIcon className="size-10 text-white" />
         </button>
       </div>
 
@@ -117,7 +118,7 @@ const Menu = ({
             onClick={closeMenu}
             className="absolute top-2.5 right-9.5"
           >
-            <div className="size-10 bg-cyan-600"></div>
+            <X className="size-10 " />
           </button>
 
           <h2>Your places: </h2>
