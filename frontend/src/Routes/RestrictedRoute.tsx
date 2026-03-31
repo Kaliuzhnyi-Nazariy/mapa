@@ -9,9 +9,13 @@ const RestrictedRoute = ({
   component: React.ReactElement;
   redirectTo: string;
 }) => {
-  const { isUserLoggedIn } = useAuth();
+  const { isUserLoggedIn, isUserResfreshing } = useAuth();
 
-  return isUserLoggedIn ? <Navigate to={redirectTo} /> : Component;
+  return isUserLoggedIn && !isUserResfreshing ? (
+    <Navigate to={redirectTo} />
+  ) : (
+    Component
+  );
 };
 
 export default RestrictedRoute;

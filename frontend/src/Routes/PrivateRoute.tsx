@@ -10,7 +10,6 @@ const PrivateRoute = ({
   redirectTo: string;
 }) => {
   const { isUserLoggedIn, isUserResfreshing } = useAuth();
-
   const conditionToRedirect = !isUserLoggedIn && !isUserResfreshing;
 
   return conditionToRedirect ? <Navigate to={redirectTo} /> : Component;
