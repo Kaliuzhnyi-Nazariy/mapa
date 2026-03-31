@@ -13,7 +13,7 @@ const AuthPage = () => {
   return (
     <div className="min-[1024px]:flex w-full min-h-screen">
       <div className="bg-orange-500 h-screen flex justify-center items-center min-[1024px]:w-1/2">
-        <div className="bg-white p-5 rounded-2xl max-h-[350px] grid w-4/5 min-[1024px]:p-10">
+        <div className="bg-white p-5 rounded-2xl  grid w-4/5 min-[1024px]:p-10">
           <ul className="grid grid-cols-3 self-center justify-self-center w-full">
             <li className="w-full h-full flex justify-end">
               <button
