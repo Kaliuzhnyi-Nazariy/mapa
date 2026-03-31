@@ -1,102 +1,115 @@
 import { useState } from "react";
 import { useAppDispatch } from "../../redux/dispatch";
-import { signin } from "../../redux/user/authRequests";
-import { useSelector } from "react-redux";
-import { userLoading, username } from "../../redux/user/selectors";
 import { customToast } from "../../toasts/toast";
 import { Eye, EyeClosed } from "lucide-react";
-import type { ReturnUser } from "../../redux/user/userTypes";
+import { useMutation } from "@tanstack/react-query";
+import { signin } from "../../features/tanstackQuery/requests";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signinValidation } from "./validation";
+import { useNavigate } from "react-router";
+import { getMe } from "../../redux/user/userRequests";
+
+export type SigninForm = {
+  email: string;
+  password: string;
+};
 
 const Signin = () => {
   const dispatch = useAppDispatch();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isValid },
+  } = useForm<SigninForm>({
+    mode: "all",
+    resolver: zodResolver(signinValidation),
+  });
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const isLoading = useSelector(userLoading);
-  const user = useSelector(username);
+  const navigator = useNavigate();
 
-  const onSubmit = async () => {
-    if (!email || !password) return;
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["signin"],
+    mutationFn: ({ email, password }: { email: string; password: string }) =>
+      signin({ email, password }),
+    onSuccess: async (data: { name: string }) => {
+      reset({
+        email: "",
+        password: "",
+      });
 
-    const res = await dispatch(signin({ email, password }));
+      customToast("suc", `Welcome back, ${data.name}!`);
+      await dispatch(getMe());
+      navigator("/map");
+    },
+    onError: (err: string) => {
+      customToast("err", err);
+    },
+  });
 
-    if (res.meta.requestStatus == "fulfilled") {
-      customToast("suc", `Welcome back, ${user}!`);
-    } else if (res.meta.requestStatus == "rejected") {
-      const resData: ReturnUser | { message: string } | undefined = res.payload;
-
-      if (resData && "message" in resData) {
-        customToast("err", resData.message);
-      } else {
-        customToast("err", "Unexpected error");
-      }
-    }
+  const onSubmit: SubmitHandler<SigninForm> = (data) => {
+    mutate(data);
   };
 
   const liStyle =
-    "group opacity-50 focus-within:opacity-100 transition-opacity duration-150";
+    "group opacity-50 focus-within:opacity-100 transition-opacity duration-150 flex flex-col gap-1";
 
   const inputStyle =
     "outline focus:outline-amber-500 transition-colors relative w-full px-2 py-1 rounded";
 
   return (
-    <>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit();
-        }}
-        className=""
+    <form onSubmit={handleSubmit(onSubmit)} className="mt-2">
+      <ul className="flex flex-col gap-3">
+        <li className={liStyle}>
+          <label htmlFor="email">Email</label>
+
+          <input
+            id="email"
+            type="email"
+            className={inputStyle}
+            disabled={isPending}
+            {...register("email")}
+          />
+          {errors.email && (
+            <p className="text-red-500 text-xs">{errors.email.message}</p>
+          )}
+        </li>
+        <li className={liStyle}>
+          <label htmlFor="password">Password:</label>
+          <div className="relative">
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              className={inputStyle}
+              disabled={isPending}
+              {...register("password")}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute top-1/2 -translate-y-1/2 right-1 size-5"
+              disabled={isPending}
+            >
+              {showPassword ? <Eye /> : <EyeClosed />}
+            </button>
+          </div>
+          {errors.password && (
+            <p className="text-xs text-red-500">{errors.password.message}</p>
+          )}
+        </li>
+      </ul>
+
+      <button
+        className="disabled:opacity-50 mt-4 w-full py-2 bg-orange-500 text-white"
+        disabled={!isValid || isPending}
       >
-        <ul className="flex flex-col gap-3">
-          <li className={liStyle}>
-            <label htmlFor="">
-              <h3>Email: </h3>
-
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={inputStyle}
-                disabled={isLoading}
-              />
-            </label>
-          </li>
-          <li className="group opacity-50 focus-within:opacity-100 transition-opacity duration-150">
-            <label htmlFor="">
-              <h3>Password: </h3>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className={inputStyle}
-                  disabled={isLoading}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute top-1/2 -translate-y-1/2 right-1 size-5"
-                  disabled={isLoading}
-                >
-                  {showPassword ? <Eye /> : <EyeClosed />}
-                </button>
-              </div>
-            </label>
-          </li>
-        </ul>
-
-        <button
-          className="disabled:opacity-50 mt-4 w-full py-2 bg-orange-500 text-white"
-          disabled={!email || !password || isLoading}
-        >
-          {isLoading ? "Loading..." : "Signin"}
-        </button>
-      </form>
-    </>
+        {isPending ? "Loading..." : "Signin"}
+      </button>
+    </form>
   );
 };
 
