@@ -63,7 +63,7 @@ const EditMarkerModal = ({
         markerId: id,
         markerName: newName,
         position: { lat, lng },
-      })
+      }),
     );
 
     removeMarkers({ map, markerId: id });
@@ -96,6 +96,7 @@ const EditMarkerModal = ({
     if (res.meta.requestStatus === "fulfilled") {
       // console.log(id);
       removeMarkers({ map, markerId: id });
+      await dispatch(getMarkers());
       closeModal();
 
       const resData: Marker | { message: string } | undefined = res.payload;
