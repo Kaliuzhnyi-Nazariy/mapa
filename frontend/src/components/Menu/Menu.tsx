@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Locations from "../Map/Locations";
 import { useSelector } from "react-redux";
-import { markers } from "../../redux/marker/selector";
+import { markers, markersLoading } from "../../redux/marker/selector";
 import { Map } from "mapbox-gl";
 import MenuListItem from "./MenuListItem";
 import { MenuIcon, X } from "lucide-react";
@@ -80,6 +80,8 @@ const Menu = ({
     }
   }, [id, userMarkers]);
 
+  const userMarkersLoading = useSelector(markersLoading);
+
   return (
     <div
       className={`overflow-hidden w-full relative block ${
@@ -125,26 +127,34 @@ const Menu = ({
           <h2>Your places: </h2>
           <small>Amount: {userMarkers.length}</small>
 
-          {userMarkers && userMarkers.length > 0 ? (
-            <ul className="mt-5 flex flex-col gap-3 overflow-y-auto max-h-[84vh]">
-              {userMarkers.map((um) => {
-                return (
-                  <MenuListItem
-                    key={um.id}
-                    um={um}
-                    mapRef={mapRef}
-                    id={id}
-                    itemRefs={itemRefs}
-                    closeMenu={closeMenu}
-                    openEdit={openEdit}
-                  />
-                );
-              })}
-            </ul>
+          {userMarkersLoading ? (
+            "Loading..."
           ) : (
-            <p className="absolute top-1/2 left-1/2 -translate-1/2 opacity-50">
-              No data
-            </p>
+            <>
+              {userMarkers && userMarkers.length > 0 ? (
+                <ul className="mt-5 flex flex-col gap-3 overflow-y-auto max-h-[84vh]">
+                  {userMarkers.map((um) => {
+                    if (!um || !um.id) return null;
+
+                    return (
+                      <MenuListItem
+                        key={um.id}
+                        um={um}
+                        mapRef={mapRef}
+                        id={id}
+                        itemRefs={itemRefs}
+                        closeMenu={closeMenu}
+                        openEdit={openEdit}
+                      />
+                    );
+                  })}
+                </ul>
+              ) : (
+                <p className="absolute top-1/2 left-1/2 -translate-1/2 opacity-50">
+                  No data
+                </p>
+              )}
+            </>
           )}
         </aside>
       </div>
