@@ -7,7 +7,7 @@ const getMarkersService = async (id: string) => {
     [id],
   );
 
-  return { data: rows[0] };
+  return { data: rows };
 };
 
 const addMarkerService = async ({
