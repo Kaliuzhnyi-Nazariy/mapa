@@ -3,7 +3,7 @@ import type { Marker } from "../../types/markers";
 import { Map } from "mapbox-gl";
 import { moveToMarker } from "../Map/locationsRequests";
 import { useAppDispatch } from "../../redux/dispatch";
-import { deleteMarker } from "../../redux/marker/request";
+import { deleteMarker, getMarkers } from "../../redux/marker/request";
 import { removeMarkers } from "../Map/useMap";
 import { useSelector } from "react-redux";
 import { markersLoading } from "../../redux/marker/selector";
@@ -40,20 +40,17 @@ const MenuListItem = ({
   const markerLoading = useSelector(markersLoading);
 
   const deleteMarkerHandle = async () => {
-    const res = await dispatch(deleteMarker({ markerId: um.id }));
-    removeMarkers({ map: mapRef, markerId: um.id });
-
-    if (res.meta.requestStatus === "fulfilled") {
-      // console.log(id);
-      removeMarkers({ map: mapRef, markerId: String(id) });
-
+    try {
+      const res = await dispatch(deleteMarker({ markerId: um.id }));
+      removeMarkers({ map: mapRef, markerId: um.id });
+      await dispatch(getMarkers());
       const resData: Marker | { message: string } | undefined = res.payload;
 
       if (resData && "name" in resData) {
         customToast("suc", `'${resData && resData.name}' marker deleted!`);
       }
-    } else {
-      customToast("err", "Sth went wrong!");
+    } catch (error: unknown) {
+      customToast("err", error as string);
     }
   };
 
@@ -83,7 +80,7 @@ const MenuListItem = ({
       <h3>
         Name: <b>{um.name}</b>
       </h3>
-      <ul className="flex gap-2 text-[12px]">
+      <ul className="flex gap-1 text-[12px] flex-col my-2 min-[1440px]:flex-row min-[1440px]:gap-2 ">
         <li>lat: {um.position.lat}</li>
         <li>lng: {um.position.lng}</li>
       </ul>
@@ -92,8 +89,8 @@ const MenuListItem = ({
           <p className="px-auto">Loading...</p>
         </div>
       ) : (
-        <ul className="flex gap-2">
-          <li className="w-1/2">
+        <ul className="flex gap-1 flex-col md:flex-row md:gap-2">
+          <li className="md:w-1/2">
             <button
               type="button"
               className="w-full bg-orange-500 text-white text-center"
@@ -111,7 +108,7 @@ const MenuListItem = ({
               Edit
             </button>
           </li>
-          <li className="w-1/2">
+          <li className="md:w-1/2">
             <button
               type="button"
               className="w-full bg-orange-500 text-white text-center"
