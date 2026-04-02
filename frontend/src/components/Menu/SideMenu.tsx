@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import MenuListItem from "./MenuListItem";
+// import MenuListItem from "./MenuListItem";
 import { useSelector } from "react-redux";
 import { markers, markersLoading } from "../../redux/marker/selector";
 import { Map } from "mapbox-gl";
 
 const SideMenu = ({
-  mapRef,
+  // mapRef,
   id,
-  openEdit,
-}: // extraStyles,
+}: // openEdit,
+// extraStyles,
 {
   mapRef: React.RefObject<Map | null>;
   id?: number | null;
