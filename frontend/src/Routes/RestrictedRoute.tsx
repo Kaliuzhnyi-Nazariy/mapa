@@ -11,6 +11,8 @@ const RestrictedRoute = ({
 }) => {
   const { isUserLoggedIn, isUserResfreshing } = useAuth();
 
+  if (!isUserLoggedIn && isUserResfreshing) return "Loading...";
+
   return isUserLoggedIn && !isUserResfreshing ? (
     <Navigate to={redirectTo} />
   ) : (

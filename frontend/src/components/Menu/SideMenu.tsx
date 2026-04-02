@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import MenuListItem from "./MenuListItem";
 import { useSelector } from "react-redux";
-import { markers } from "../../redux/marker/selector";
+import { markers, markersLoading } from "../../redux/marker/selector";
 import { Map } from "mapbox-gl";
 
 const SideMenu = ({
@@ -26,19 +26,17 @@ const SideMenu = ({
   // extraStyles?: string;
 }) => {
   const userMarkers = useSelector(markers);
+  const userMarkersLoading = useSelector(markersLoading);
   const itemRefs = useRef<Record<string, HTMLLIElement | null>>({});
 
   const [chosenMarker, setChosenMarker] = useState<string | null>(null);
 
   useEffect(() => {
-    // console.log(id);
     if (!id) return;
 
     setChosenMarker(String(id));
 
     const el = itemRefs.current[String(id)];
-
-    // console.log(el);
 
     if (el) {
       el.scrollIntoView({
@@ -46,7 +44,7 @@ const SideMenu = ({
         block: "center",
       });
     }
-  }, [id, userMarkers]);
+  }, [id]);
 
   setTimeout(() => {
     setChosenMarker(null);
@@ -58,28 +56,36 @@ const SideMenu = ({
       onClick={(e) => e.stopPropagation()}
     >
       <h2>Your places: </h2>
-      <small>Amount: {userMarkers.length}</small>
+      <small>
+        Amount: {userMarkersLoading ? "loading..." : userMarkers.length}
+      </small>
 
-      {userMarkers && userMarkers.length > 0 ? (
-        <ul className="mt-5 flex flex-col gap-3 overflow-y-auto max-h-[75vh]">
-          {userMarkers.map((um) => {
-            return (
-              <MenuListItem
-                key={um.id}
-                um={um}
-                mapRef={mapRef}
-                id={Number(chosenMarker)}
-                // id={id}
-                itemRefs={itemRefs}
-                openEdit={openEdit}
-              />
-            );
-          })}
-        </ul>
+      {userMarkersLoading ? (
+        "Markers loading..."
       ) : (
-        <p className="absolute top-1/2 left-1/2 -translate-1/2 opacity-50">
-          No data
-        </p>
+        <>
+          {userMarkers && userMarkers.length > 0 ? (
+            <ul className="mt-5 flex flex-col gap-3 overflow-y-auto max-h-[75vh]">
+              {userMarkers.map((um) => {
+                return (
+                  <MenuListItem
+                    key={um.id}
+                    um={um}
+                    mapRef={mapRef}
+                    id={Number(chosenMarker)}
+                    // id={id}
+                    itemRefs={itemRefs}
+                    openEdit={openEdit}
+                  />
+                );
+              })}
+            </ul>
+          ) : (
+            <p className="absolute top-1/2 left-1/2 -translate-1/2 opacity-50">
+              No data
+            </p>
+          )}
+        </>
       )}
     </aside>
   );
