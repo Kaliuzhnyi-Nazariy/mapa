@@ -3,18 +3,18 @@ import { useAppDispatch } from "../../redux/dispatch";
 import { addMarker } from "../../redux/marker/request";
 import { useSelector } from "react-redux";
 import { markersLoading } from "../../redux/marker/selector";
-import { generateNewMarker } from "./useMap";
+// import { generateNewMarker } from "./useMap";
 import type { Map } from "mapbox-gl";
-import type { Marker } from "../../types/markers";
+// import type { Marker } from "../../types/markers";
 import { customToast } from "../../toasts/toast";
 
 const AddMarkerModal = ({
   isShown,
   closeModal,
   lngLat,
-  openEdit,
-  mapRef,
-}: {
+}: // openEdit,
+// mapRef,
+{
   isShown: boolean;
   closeModal: () => void;
   lngLat: { lng: number; lat: number } | null;
@@ -67,21 +67,21 @@ const AddMarkerModal = ({
           lng: placePosition.lng,
           lat: placePosition.lat,
         },
-      })
+      }),
     );
 
     if (res.meta.requestStatus == "fulfilled") {
-      if (mapRef) {
-        generateNewMarker({
-          lat: placePosition.lat,
-          lng: placePosition.lng,
-          type: "users",
-          map: mapRef.current!,
-          name: nameOfPlace,
-          id: (res.payload as Marker).id,
-          openEdit: openEdit,
-        });
-      }
+      // if (mapRef) {
+      //   generateNewMarker({
+      //     lat: placePosition.lat,
+      //     lng: placePosition.lng,
+      //     type: "users",
+      //     map: mapRef.current!,
+      //     name: nameOfPlace,
+      //     id: (res.payload as Marker).id,
+      //     openEdit: openEdit,
+      //   });
+      // }
 
       clearFields();
       closeModal();
