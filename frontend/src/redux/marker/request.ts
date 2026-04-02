@@ -41,7 +41,7 @@ export const addMarker = createAsyncThunk<
   try {
     const res = await api.post("/marker/add", data);
     // console.log(res.data);
-    return res.data[0];
+    return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       // console.log(error);
