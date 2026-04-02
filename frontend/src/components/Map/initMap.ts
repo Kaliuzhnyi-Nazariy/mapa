@@ -8,6 +8,9 @@ export function useInitMap() {
     -74.0242, 40.6941,
   ]);
 
+  const onMapClickRef =
+    useRef<(e: mapboxgl.MapMouseEvent) => void | null>(null);
+
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
@@ -23,12 +26,28 @@ export function useInitMap() {
 
     mapRef.current = map;
 
+    map.on("click", (e) => {
+      onMapClickRef.current?.(e);
+    });
+
     map.on("load", () => {
       mapRef.current = map;
     });
 
-    return () => map.remove();
+    return () => {
+      map.remove();
+    };
   }, []);
 
-  return { mapRef, mapContainerRef, initialCoords, setInitialCoords };
+  return {
+    mapRef,
+    mapContainerRef,
+    initialCoords,
+    setInitialCoords,
+    setOnMapClick: (
+      fn: ((e: mapboxgl.MapMouseEvent) => void | null) | null,
+    ) => {
+      onMapClickRef.current = fn;
+    },
+  };
 }
