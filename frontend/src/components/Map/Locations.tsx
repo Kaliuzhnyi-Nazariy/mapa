@@ -6,6 +6,8 @@ import { generateNewMarker, removeMarkers } from "./useMap";
 import type { Marker } from "../../types/markers";
 import { LocateFixed, MapPinned } from "lucide-react";
 import { customToast } from "../../toasts/toast";
+import { useSelector } from "react-redux";
+import { markersLoading } from "../../redux/marker/selector";
 
 const Locations = ({
   mapRef,
@@ -88,6 +90,8 @@ const Locations = ({
     );
   }, [locations]);
 
+  const markerLoading = useSelector(markersLoading);
+
   return (
     <div className="absolute top-3 left-3 w-[95%] min-[768px]:relative z-40 min-[768px]:w-4/6 min-[768px]:top-0 min-[768px]:left-0 min-[768px]:h-fit min-[1440px]:fixed min-[1440px]:top-11 min-[1440px]:left-1/2 min-[1440px]:-translate-1/2  ">
       <ul className="hidden min-[768px]:grid gap-5 text-[12px] grid-cols-4 w-full h-5 min-[768px]:grid-cols-[1fr_4fr_1fr] min-[768px]:h-fit ">
@@ -107,14 +111,20 @@ const Locations = ({
             onChange={(e) => onChange(e.target.value)}
           >
             <option value="select">select</option>
-            {markersList.length > 0 &&
-              markersList.map((m) => {
-                return (
-                  <option value={JSON.stringify(m)} key={m.id}>
-                    {m.name}
-                  </option>
-                );
-              })}
+            {markerLoading ? (
+              "loading..."
+            ) : (
+              <>
+                {markersList.length > 0 &&
+                  markersList.map((m) => {
+                    return (
+                      <option value={JSON.stringify(m)} key={m.id}>
+                        {m.name}
+                      </option>
+                    );
+                  })}
+              </>
+            )}
           </select>
         </li>
         <li className="size-10 grid justify-self-center justify-center items-center rounded-full bg-white col-start-4 min-[768px]:col-start-3 ">
