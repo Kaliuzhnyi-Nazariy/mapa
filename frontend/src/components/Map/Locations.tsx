@@ -6,23 +6,18 @@ import { generateNewMarker, removeMarkers } from "./useMap";
 import type { Marker } from "../../types/markers";
 import { LocateFixed, MapPinned } from "lucide-react";
 import { customToast } from "../../toasts/toast";
-import { useSelector } from "react-redux";
-import { markersLoading } from "../../redux/marker/selector";
 
 const Locations = ({
   mapRef,
   lngLat,
   markersList,
+  markerLoading,
 }: {
   mapRef: React.RefObject<Map | null>;
   // lngLat: React.RefObject<{ lng: number; lat: number } | null>;
   lngLat: { lng: number; lat: number } | null;
-  markersList: {
-    id: string;
-    name: string;
-    position: { lng: number; lat: number };
-    owner_id?: string;
-  }[];
+  markersList: Marker[];
+  markerLoading: boolean;
 }) => {
   const [chosenMarker, setChosenMarker] = useState<null | Marker>(null);
 
@@ -90,7 +85,7 @@ const Locations = ({
     );
   }, [locations]);
 
-  const markerLoading = useSelector(markersLoading);
+  // const markerLoading = useSelector(markersLoading);
 
   return (
     <div className="absolute top-3 left-3 w-[95%] min-[768px]:relative z-40 min-[768px]:w-4/6 min-[768px]:top-0 min-[768px]:left-0 min-[768px]:h-fit min-[1440px]:fixed min-[1440px]:top-11 min-[1440px]:left-1/2 min-[1440px]:-translate-1/2  ">

@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../redux/dispatch";
 import { getMarkers } from "../../redux/marker/request";
 import { MapContainer } from "./MapContainer";
-import SideMenu from "../Menu/SideMenu";
+// import SideMenu from "../Menu/SideMenu";
 import { useInitMap } from "./initMap";
 import AddMarkerModal from "./AddMarkerModal";
 import { useSelector } from "react-redux";
-import { markers } from "../../redux/marker/selector";
+import { markers, markersLoading } from "../../redux/marker/selector";
 import { generateNewMarker, removeMarkers } from "./useMap";
 import EditMarkerModal from "./EditMarkerModal";
-import Menu from "../Menu/Menu";
+import SideMenu from "../Menu/SideMenu";
+import Header from "../Header/Header";
 
 export interface Coordinates {
   lng: number;
@@ -31,14 +32,7 @@ const MapComponent = () => {
     dispatch(getMarkers());
   }, []);
 
-  const {
-    mapContainerRef,
-    mapRef,
-    // initialCoords,
-    // setInitialCoords,
-    // clickHandle,
-    setOnMapClick,
-  } = useInitMap();
+  const { mapContainerRef, mapRef, setOnMapClick } = useInitMap();
 
   const [lngLat, setLngLat] = useState<Coordinates | null>(null);
 
@@ -56,7 +50,7 @@ const MapComponent = () => {
 
   const openMenu = () => setMenuOpen(true);
 
-  const resetMenu = () => setMenuOpen(false);
+  const closeMenu = () => setMenuOpen(false);
 
   const [chosenMarker, setMarker] = useState<number | null>(null);
 
@@ -71,10 +65,7 @@ const MapComponent = () => {
       if (isClickData) {
         const clickData = target?.closest("div");
 
-        if (!clickData) {
-          // setMarker();
-          return;
-        }
+        if (!clickData) return;
 
         const id = clickData.getAttribute("marker_id");
 
@@ -161,23 +152,29 @@ const MapComponent = () => {
     setMarker(null);
   }, 500);
 
+  const userMarkers = useSelector(markers);
+  const userMarkersLoading = useSelector(markersLoading);
+
   return (
-    <div className="min-[1440px]:grid min-[1440px]:grid-cols-[25vw_75vw] min-[1440px]:grid-rows-[88px_auto] min-[1440px]:overflow-hidden w-full min-h-screen overflow-hidden h-screen">
-      <Menu
+    <div className="w-full h-screen overflow-hidden min-[1440px]:grid min- min-[1440px]:grid-rows-[auto_1fr]  ">
+      <Header
+        isMenuOpen={isMenuOpen}
+        openMenu={openMenu}
+        closeMenu={closeMenu}
         mapRef={mapRef}
-        menuTrigger={isMenuOpen}
-        id={chosenMarker}
-        resetMenu={resetMenu}
-        // restMarker={restMarker}
+        userMarkers={userMarkers}
+        userMarkersLoading={userMarkersLoading}
         lngLat={lngLat}
-        openEdit={openEdit}
-        extraStyles="col-start-1 col-end-3 row-start-1"
       />
       <SideMenu
+        closeMenu={closeMenu}
+        isMenuOpen={isMenuOpen}
         mapRef={mapRef}
-        id={chosenMarker}
         openEdit={openEdit}
-        // extraStyles="col-start-1 col-end-3 row-start-1"
+        id={chosenMarker}
+        userMarkers={userMarkers}
+        userMarkersLoading={userMarkersLoading}
+        // key={id}
       />
       <MapContainer mapContainerRef={mapContainerRef} />
       <AddMarkerModal
