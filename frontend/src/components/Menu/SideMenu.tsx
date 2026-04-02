@@ -52,6 +52,8 @@ const SideMenu = ({
     }, 2000);
   }, [chosenMarker]);
 
+  console.log({ userMarkers });
+
   return (
     <aside
       className={` w-[25vw] py-4 px-5 transition-all duration-300 overflow-hidden hidden min-[1440px]:block row-start-2 `}
@@ -71,17 +73,18 @@ const SideMenu = ({
               {userMarkers.map((um) => {
                 if (!um || !um.id) return null;
 
-                return (
-                  <MenuListItem
-                    key={um.id}
-                    um={um}
-                    mapRef={mapRef}
-                    id={Number(chosenMarker)}
-                    // id={id}
-                    itemRefs={itemRefs}
-                    openEdit={openEdit}
-                  />
-                );
+                return null;
+                // return (
+                //   <MenuListItem
+                //     key={um.id}
+                //     um={um}
+                //     mapRef={mapRef}
+                //     id={Number(chosenMarker)}
+                //     // id={id}
+                //     itemRefs={itemRefs}
+                //     openEdit={openEdit}
+                //   />
+                // );
               })}
             </ul>
           ) : (
