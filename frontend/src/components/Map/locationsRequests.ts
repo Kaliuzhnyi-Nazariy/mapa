@@ -6,7 +6,8 @@ import { customToast } from "../../toasts/toast";
 
 export const getLocation = (
   mapRef: React.RefObject<Map | null>,
-  lngLat: React.RefObject<{ lng: number; lat: number } | null>,
+  lngLat: { lng: number; lat: number } | null,
+  // lngLat: React.RefObject<{ lng: number; lat: number } | null>,
   setChosenMarker: Dispatch<
     React.SetStateAction<{
       id: string;
@@ -14,7 +15,7 @@ export const getLocation = (
       position: { lng: number; lat: number };
       owner_id?: string;
     } | null>
-  >
+  >,
 ) => {
   const getLocation = () => {
     if (navigator.geolocation) {
@@ -25,13 +26,13 @@ export const getLocation = (
   const succCalback = (position: {
     coords: { latitude: number; longitude: number };
   }) => {
-    lngLat.current = {
+    lngLat = {
       lng: position.coords.longitude,
       lat: position.coords.latitude,
     };
 
-    if (lngLat.current) {
-      mapRef.current?.flyTo({ center: lngLat.current as LngLatLike });
+    if (lngLat) {
+      mapRef.current?.flyTo({ center: lngLat as LngLatLike });
     }
 
     const map = mapRef.current;
@@ -67,7 +68,7 @@ export const getLocation = (
 
 export const moveToMarker = (
   mapRef: React.RefObject<Map | null>,
-  locationCoords: { lng: number; lat: number }
+  locationCoords: { lng: number; lat: number },
 ) => {
   // console.log(!mapRef);
   if (!mapRef) {

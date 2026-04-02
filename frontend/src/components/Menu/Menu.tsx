@@ -23,7 +23,8 @@ const Menu = ({
   // resetMenu?: () => React.Dispatch<React.SetStateAction<boolean>>;
   resetMenu?: () => void;
   restMarker?: () => void;
-  lngLat: React.RefObject<{ lng: number; lat: number } | null>;
+  lngLat: { lng: number; lat: number } | null;
+  // lngLat: React.RefObject<{ lng: number; lat: number } | null>;
   openEdit: ({
     name,
     id,
@@ -81,11 +82,11 @@ const Menu = ({
 
   return (
     <div
-      className={`overflow-hidden w-full relative hidden min-[768px]:block ${
+      className={`overflow-hidden w-full relative block ${
         extraStyles && extraStyles
       }`}
     >
-      <div className="fixed h-15 bg-orange-500 w-full top-0 left-0 z-10 flex justify-between items-center px-10 min-[1440px]:relative min-[1440px]:h-22">
+      <div className="fixed h-15 bg-orange-500 w-full top-0 left-0 z-10 flex justify-between items-center px-6 min-[1440px]:relative min-[1440px]:h-22">
         {/* <div className="bg-orange-500 w-full h-full flex justify-between items-center"></div> */}
         <h1 className="text-white">Mapa</h1>
         <Locations mapRef={mapRef} markersList={userMarkers} lngLat={lngLat} />
@@ -94,7 +95,7 @@ const Menu = ({
           onClick={openMenu}
           className="min-[1440px]:hidden"
         >
-          <MenuIcon className="size-10 text-white" />
+          <MenuIcon className="size-5 text-white" />
         </button>
       </div>
 
@@ -108,7 +109,7 @@ const Menu = ({
         }}
       >
         <aside
-          className={`fixed top-0 right-0 bg-white w-2/5 min-h-screen z-30 py-4 px-5  ${
+          className={`fixed top-0 right-0 bg-white w-3/4 min-[768px]:w-2/5 min-h-screen z-30 py-4 px-5 ${
             isMenuOpen ? "translate-x-0" : "translate-x-full"
           } transition-all duration-300 overflow-hidden`}
           onClick={(e) => e.stopPropagation()}
@@ -116,9 +117,9 @@ const Menu = ({
           <button
             type="button"
             onClick={closeMenu}
-            className="absolute top-2.5 right-9.5"
+            className="absolute top-4.5 right-5.5"
           >
-            <X className="size-10 " />
+            <X className="size-5 " />
           </button>
 
           <h2>Your places: </h2>
