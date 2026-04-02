@@ -32,7 +32,7 @@ const SideMenu = ({
   const [chosenMarker, setChosenMarker] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!id) return;
+    if (id == null) return;
 
     setChosenMarker(String(id));
 
@@ -46,9 +46,11 @@ const SideMenu = ({
     }
   }, [id]);
 
-  setTimeout(() => {
-    setChosenMarker(null);
-  }, 2000);
+  useEffect(() => {
+    setTimeout(() => {
+      setChosenMarker(null);
+    }, 2000);
+  }, [chosenMarker]);
 
   return (
     <aside
@@ -67,6 +69,8 @@ const SideMenu = ({
           {userMarkers && userMarkers.length > 0 ? (
             <ul className="mt-5 flex flex-col gap-3 overflow-y-auto max-h-[75vh]">
               {userMarkers.map((um) => {
+                if (!um || !um.id) return null;
+
                 return (
                   <MenuListItem
                     key={um.id}
