@@ -30,7 +30,7 @@ Backend
 
 ## Screenshots
 
-### Auth pagAe
+### Auth page
 ![PC Auth page](images/image.png)
 ![Mob Auth page](images/image-1.png)
 
