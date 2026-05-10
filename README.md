@@ -28,6 +28,25 @@ Backend
 - Highlight selected marker in UI and sync with map
 - Responsive design
 
+## Screenshots
+
+### Auth pagAe
+![PC Auth page](images/image.png)
+![Mob Auth page](images/image-1.png)
+
+### Main page
+![Mob Main page 1](images/image-2.png)
+![Mob Main page 2](images/image-3.png)
+
+![PC Main page 1](images/image-4.png)
+![PC Main page 2](images/image-6.png)
+
+### Add marker modal
+![Add marker modal](images/image-5.png)
+
+### Find near
+![Find near me](images/image-7.png)
+
 ## How to run
 ```bash
 # backend
