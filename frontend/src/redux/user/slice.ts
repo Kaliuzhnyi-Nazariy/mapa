@@ -13,6 +13,16 @@ interface UserInitialState {
   isRefreshing: boolean;
 }
 
+// const initialState: UserInitialState = {
+//   user: {
+//     name: null,
+//     email: null,
+//   },
+//   isLoading: false,
+//   isLoggedIn: false,
+//   error: null,
+//   isRefreshing: false,
+// };
 const initialState: UserInitialState = {
   user: {
     name: null,
@@ -21,7 +31,7 @@ const initialState: UserInitialState = {
   isLoading: false,
   isLoggedIn: false,
   error: null,
-  isRefreshing: false,
+  isRefreshing: true,
 };
 
 // const pendingHandler = (state: UserInitialState) => {
@@ -40,7 +50,14 @@ const initialState: UserInitialState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    logOut: (state) => {
+      state.user = { name: null, email: null };
+      state.isLoggedIn = false;
+      state.isRefreshing = false;
+      state.error = null;
+    },
+  },
   extraReducers(builder) {
     builder
       // .addCase(signup.pending, pendingHandler)
@@ -107,4 +124,5 @@ const userSlice = createSlice({
   },
 });
 
+export const { logOut } = userSlice.actions;
 export const userReducer = userSlice.reducer;
