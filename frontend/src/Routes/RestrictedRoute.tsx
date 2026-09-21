@@ -34,14 +34,11 @@ const RestrictedRoute = ({
   component: React.ReactElement;
   redirectTo: string;
 }) => {
-  // 🟢 Use Redux selectors instead of useAuth()
   const isUserLoggedIn = useSelector(userLoggedIn);
   const isUserResfreshing = useSelector(userIsRefreshing);
 
-  // While the app is verifying the session, render nothing or a loader
   if (isUserResfreshing) return "Loading...";
 
-  // If logged in, block entry to restricted pages (like /auth) and redirect
   return isUserLoggedIn ? <Navigate to={redirectTo} /> : Component;
 };
 
