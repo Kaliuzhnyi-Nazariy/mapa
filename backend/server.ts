@@ -21,8 +21,15 @@ app.use(
     origin: ["http://localhost:5173", "https://mapa-app.onrender.com"],
     credentials: true,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-  })
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Cache-Control",
+      "Pragma",
+      "Expires",
+    ],
+  }),
 );
 
 app.use(cookieParser());
@@ -35,32 +42,43 @@ app.use("/api/marker", markerRoutes);
 
 app.use("/api/user", userRoutes);
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../../frontend/dist")));
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname, "../../frontend/dist")));
 
-  app.all("/{*any}", (_req, res) => {
-    res.setHeader(
-      "Content-Security-Policy",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; worker-src 'self' blob:;"
-    );
+//   app.all("/{*any}", (_req, res) => {
+//     res.setHeader(
+//       "Content-Security-Policy",
+//       "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; worker-src 'self' blob:;",
+//     );
 
-    res.sendFile(path.resolve(__dirname, "../../frontend/dist/index.html"));
-  });
-}
+//     res.sendFile(path.resolve(__dirname, "../../frontend/dist/index.html"));
+//   });
+// }
 
 app.use(errorRoute);
 
-db.connect()
+// db.connect()
+//   .then(() => {
+//     initTablesDB().then(() => {
+//       try {
+//         app.listen(process.env.PORT);
+//       } catch (error) {
+//         console.log(error);
+//         process.exit(1);
+//       }
+//     });
+//   })
+//   .catch((err) => {
+//     console.log("Failed db connection! Reason: ", err);
+//   });
+
+initTablesDB()
   .then(() => {
-    initTablesDB().then(() => {
-      try {
-        app.listen(process.env.PORT);
-      } catch (error) {
-        console.log(error);
-        process.exit(1);
-      }
+    app.listen(process.env.PORT, () => {
+      console.log(`Server running on port ${process.env.PORT}`);
     });
   })
   .catch((err) => {
-    console.log("Failed db connection! Reason: ", err);
+    console.error("Failed to initialize database tables:", err);
+    process.exit(1);
   });

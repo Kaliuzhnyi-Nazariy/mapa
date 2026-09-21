@@ -89,9 +89,14 @@ const updateMarkerService = async ({
   return { data: rows[0] };
 };
 
+const clearAll = async ({ id }: { id: string }) => {
+  return await db.query(`DELETE FROM Map_markers WHERE owner_id=$1`, [id]);
+};
+
 export {
   getMarkersService,
   addMarkerService,
   deleteMarkerService,
   updateMarkerService,
+  clearAll,
 };

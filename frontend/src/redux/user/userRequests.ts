@@ -9,7 +9,7 @@ export const getMe = createAsyncThunk<
   { rejectValue: { message: string } }
 >("/user/getMe", async (_, { rejectWithValue }) => {
   try {
-    const res = await api.get("/user/me");
+    const res = await api.get(`/user/me?_t=${Date.now()}`);
     // console.log(res);
     return res.data;
   } catch (error) {
@@ -22,3 +22,26 @@ export const getMe = createAsyncThunk<
     return rejectWithValue({ message: "Unexpected error occurred" });
   }
 });
+
+// export const getMe = createAsyncThunk<
+//   ReturnUser,
+//   // { isPasswordInclude?: boolean } | void,
+//   void,
+//   { rejectValue: { message: string } }
+// >("/user/getMe", async (_, { rejectWithValue }) => {
+//   try {
+//     const res = await api.get("/user/me", {
+//       params: { isPasswordInclude },
+//     });
+//     // console.log(res);
+//     return res.data;
+//   } catch (error) {
+//     if (axios.isAxiosError(error)) {
+//       // console.log(error);
+//       return rejectWithValue({
+//         message: error.response?.data?.message || "Signin failed",
+//       });
+//     }
+//     return rejectWithValue({ message: "Unexpected error occurred" });
+//   }
+// });

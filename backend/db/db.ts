@@ -1,25 +1,26 @@
 import { Pool } from "pg";
 import "dotenv/config";
 
-let db: Pool;
+const isProduction = process.env.NODE_ENV === "production";
 
-if (process.env.NODE_ENV !== "production") {
-  db = new Pool({
-    host: process.env.PG_HOST,
-    user: process.env.PG_USER,
-    password: process.env.PG_PASSWORD,
-    database: process.env.PG_DATABASE,
-    port: Number(process.env.PG_PORT),
-  });
-} else {
-  db = new Pool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
-    port: Number(process.env.DB_PORT),
-    ssl: {rejectUnauthorized: false}
-  });
+const prodConnectionString = process.env.PROD_DB;
+const testConnectionString = process.env.TEST_DB;
+
+if (isProduction && !prodConnectionString) {
+  throw new Error("no link to db");
 }
+
+const connectionString = isProduction
+  ? prodConnectionString
+  : testConnectionString;
+
+const db = new Pool({
+  connectionString,
+  ssl: isProduction ? { rejectUnauthorized: false } : undefined,
+});
+
+db.on("error", (err) => {
+  console.error("Unexpected error on idle database client:", err.message);
+});
 
 export default db;

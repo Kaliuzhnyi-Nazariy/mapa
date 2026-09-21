@@ -42,3 +42,15 @@ export const signup = async ({
     throw error;
   }
 };
+
+export const signout = async () => {
+  try {
+    return (await api.post("/auth/signout")).data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error.response?.data?.message;
+    }
+
+    throw error;
+  }
+};

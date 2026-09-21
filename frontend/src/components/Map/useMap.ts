@@ -76,7 +76,7 @@ export const generateNewMarker = ({
       "py-1",
       "rounded-sm",
       "max-w-[180px]",
-      "relative"
+      "relative",
     );
 
     const btn = document.getElementById(`popup-btn-${id}`);
@@ -91,11 +91,11 @@ export const generateNewMarker = ({
       "outline-transparent",
       "rounded-[10px]",
       "w-full",
-      "mt-1"
+      "mt-1",
     );
 
     const closeBtnPopup = document.getElementsByClassName(
-      "mapboxgl-popup-close-button"
+      "mapboxgl-popup-close-button",
     );
 
     if (closeBtnPopup.length > 0) {
@@ -107,7 +107,7 @@ export const generateNewMarker = ({
         "top-1",
         "w-fit",
         "cursor-pointer",
-        "bg-initial"
+        "bg-initial",
       );
     }
 
@@ -149,8 +149,20 @@ export const removeMarkers = ({
   } else if (type) {
     // console.log("type triggered");
     const filteredMarkers = markers?.filter(
-      (m) => m._element.getAttribute("marker_type") == type
+      (m) => m._element.getAttribute("marker_type") == type,
     );
     filteredMarkers?.forEach((fm) => fm.remove());
+  }
+};
+
+export const removeAllMarkersFromMap = (mapRef: React.RefObject<Map>) => {
+  const map = mapRef.current;
+
+  if (map && map._markers) {
+    // 1. Remove each marker element from the DOM/Map visually
+    map._markers.forEach((marker: Marker) => marker.remove());
+
+    // 2. Clear the map's internal array entirely so it forgets them
+    map._markers = [];
   }
 };

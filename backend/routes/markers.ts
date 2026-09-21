@@ -10,6 +10,8 @@ router.post("/add", isAuthenticated, ctr.addMarker);
 
 router.put("/:markerId", isAuthenticated, ctr.updateMarker);
 
+router.delete("/all", isAuthenticated, ctr.deleteAllMarkers);
+
 router.delete("/:markerId", isAuthenticated, ctr.deleteMarker);
 
 export default router;

@@ -7,6 +7,7 @@ import {
   deleteMarkerService,
   getMarkersService,
   updateMarkerService,
+  clearAll,
 } from "../service/marker";
 
 const addMarker = async (req: Request, res: Response, next: NextFunction) => {
@@ -83,9 +84,22 @@ const updateMarker = async (
   res.status(200).json(data);
 };
 
+const deleteAllMarkers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { id } = (req as unknown as UserRequest).user;
+
+  await clearAll({ id });
+
+  res.status(204).end();
+};
+
 export default {
   addMarker: ctrlWrapper(addMarker),
   getMarkers: ctrlWrapper(getMarkers),
   deleteMarker: ctrlWrapper(deleteMarker),
   updateMarker: ctrlWrapper(updateMarker),
+  deleteAllMarkers: ctrlWrapper(deleteAllMarkers),
 };

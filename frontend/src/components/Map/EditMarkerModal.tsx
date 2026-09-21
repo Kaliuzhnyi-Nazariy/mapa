@@ -11,6 +11,7 @@ import { generateNewMarker, removeMarkers } from "./useMap";
 import type { Map } from "mapbox-gl";
 import { customToast } from "../../toasts/toast";
 import type { Marker } from "../../types/markers";
+import Button from "../Button";
 
 const EditMarkerModal = ({
   isModalOpen,
@@ -21,7 +22,11 @@ const EditMarkerModal = ({
   lng,
   map,
   openEdit,
+  setOnMapClick,
+  resetDefaultClick,
 }: {
+  setOnMapClick: (fn: ((e: mapboxgl.MapMouseEvent) => void) | null) => void;
+  resetDefaultClick: () => void;
   isModalOpen: boolean;
   closeModal: () => void;
   name: string;
@@ -168,6 +173,31 @@ const EditMarkerModal = ({
                   </li>
                 </ul>
               </label>
+            </li>
+            <li className="w-full">
+              <Button
+                text="Change coordinates"
+                fn={() => {
+                  closeModal();
+
+                  setOnMapClick((e: mapboxgl.MapMouseEvent) => {
+                    const { lng, lat } = e.lngLat;
+
+                    if (openEdit) {
+                      openEdit({
+                        id,
+                        name: newName,
+                        lng,
+                        lat,
+                      });
+                    }
+
+                    resetDefaultClick();
+                  });
+                }}
+                isDisabled={false}
+                type="button"
+              />
             </li>
           </ul>
         </form>

@@ -54,33 +54,25 @@ const MapComponent = () => {
 
   const [chosenMarker, setMarker] = useState<number | null>(null);
 
-  useEffect(() => {
+  const setupDefaultMapClick = () => {
     setOnMapClick((e: mapboxgl.MapMouseEvent) => {
       const target = e.originalEvent.target as HTMLElement | null;
-
       const isClickData = target
         ?.closest("div")
         ?.classList.contains("mapboxgl-marker");
 
       if (isClickData) {
         const clickData = target?.closest("div");
-
         if (!clickData) return;
 
         const id = clickData.getAttribute("marker_id");
-
         const typeOfMarker = clickData.getAttribute("marker_type");
-
-        if (typeOfMarker == "found") {
-          return;
-        }
+        if (typeOfMarker == "found") return;
 
         openMenu();
-
         if (!chosenMarker) {
           setMarker(Number(id));
         }
-
         return;
       }
 
@@ -88,9 +80,12 @@ const MapComponent = () => {
         lat: e.lngLat.lat,
         lng: e.lngLat.lng,
       });
-
       openModal();
     });
+  };
+
+  useEffect(() => {
+    setupDefaultMapClick();
   }, [setOnMapClick]);
 
   useEffect(() => {
@@ -183,7 +178,7 @@ const MapComponent = () => {
         lngLat={lngLat}
         mapRef={mapRef}
         openEdit={openEdit}
-      />{" "}
+      />
       <EditMarkerModal
         isModalOpen={isEditOpen}
         closeModal={closeEdit}
@@ -193,7 +188,9 @@ const MapComponent = () => {
         lng={editLng}
         map={mapRef}
         openEdit={openEdit}
-      />{" "}
+        setOnMapClick={setOnMapClick}
+        resetDefaultClick={setupDefaultMapClick}
+      />
     </div>
   );
 };

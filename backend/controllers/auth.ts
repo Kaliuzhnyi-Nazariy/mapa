@@ -35,9 +35,20 @@ const signin = async (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({ name: data });
 };
 
+// const signout = async (req: Request, res: Response, next: NextFunction) => {
+//   res.clearCookie("token", tokenSettings);
+//   res.status(204).end();
+// };
+
 const signout = async (req: Request, res: Response, next: NextFunction) => {
-  res.clearCookie("token", tokenSettings);
-  res.status(204).json();
+  // 1. Destructure to remove expiration settings from cookie deletion
+  const { maxAge, expires, ...clearSettings } = tokenSettings;
+
+  // 2. Clear the cookie using only structural configurations (path, domain, secure, httpOnly, sameSite)
+  res.clearCookie("token", clearSettings);
+
+  // 3. Use .send() or .end() for a 204 response since it must have NO body payload
+  res.status(204).send();
 };
 
 export default {

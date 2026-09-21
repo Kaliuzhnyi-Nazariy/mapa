@@ -104,3 +104,32 @@ export const deleteMarker = createAsyncThunk<
     return rejectWithValue({ message: "Unexpected error occurred" });
   }
 });
+
+// export const deleteAllMarkers = createAsyncThunk<
+//   void,
+//   void,
+//   { rejectValue: { message: string } }
+// >("/deleteMarker", async (_, { rejectWithValue }) => {
+//   try {
+//     const res = await api.delete(`/marker/all`);
+//     return res.data;
+//   } catch (error) {
+//     if (axios.isAxiosError(error)) {
+//       return rejectWithValue({
+//         message: error.response?.data?.message || "Signin failed",
+//       });
+//     }
+//     return rejectWithValue({ message: "Unexpected error occurred" });
+//   }
+// });
+
+export const deleteAllMarkers = async () => {
+  try {
+    return (await api.delete("/marker/all")).data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "Signin failed");
+    }
+    throw new Error("Unexpected error occurred");
+  }
+};
