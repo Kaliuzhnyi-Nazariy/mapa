@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { signout } from "../../features/tanstackQuery/requests";
 import { useAppDispatch } from "../../redux/dispatch";
 import { logOut } from "../../redux/user/slice";
-import { deleteAllMarkers } from "../../redux/marker/request";
+import { deleteAllMarkers, getMarkers } from "../../redux/marker/request";
 import Header from "./Header";
 import { useEffect } from "react";
 import { getMe } from "../../redux/user/userRequests";
@@ -41,8 +41,9 @@ const User = () => {
 
   const { mutate: clearData, isPending: isDeleting } = useMutation({
     mutationFn: deleteAllMarkers,
-    onSuccess() {
+    async onSuccess() {
       // removeAllMarkersFromMap();
+      await dispatch(getMarkers());
       navigate("/user");
     },
     onError: (error) => {
