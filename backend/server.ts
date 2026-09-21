@@ -18,7 +18,11 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://mapa-app.onrender.com"],
+    origin: [
+      "http://localhost:5173",
+      "https://mapa-app.onrender.com",
+      "https://mapa-six-eosin.vercel.app/",
+    ],
     credentials: true,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: [
