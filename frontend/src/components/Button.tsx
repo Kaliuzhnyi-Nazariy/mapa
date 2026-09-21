@@ -2,12 +2,12 @@ const Button = ({
   text,
   fn,
   isDisabled,
-  type = "button",
+  type = "submit",
 }: {
   text: string;
   fn?: () => void;
   isDisabled: boolean;
-  type: "button" | "submit";
+  type?: "button" | "submit";
 }) => {
   return (
     <button
