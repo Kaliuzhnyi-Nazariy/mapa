@@ -33,6 +33,7 @@ app.use(
       "Pragma",
       "Expires",
     ],
+    exposedHeaders: ["set-cookie"],
   }),
 );
 
