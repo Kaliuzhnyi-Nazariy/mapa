@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { errorHandler } from "../helpers";
 import db from "../db/db";
 import { decode, JwtPayload } from "jsonwebtoken";
+import cookie from "cookie";
 
 export interface UserRequest extends Request {
   user: {
@@ -15,27 +16,46 @@ export interface UserRequest extends Request {
 export const isAuthenticated = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
-  const tokenCookie = req.cookies.token;
+  let tokenCookie = req.cookies?.token;
+
+  if (!tokenCookie && req.headers["set-cookie"]) {
+    const setCookieHeader = req.headers["set-cookie"];
+    const cookiesArray = Array.isArray(setCookieHeader)
+      ? setCookieHeader
+      : [setCookieHeader];
+
+    for (const c of cookiesArray) {
+      const parsed = cookie.parse(c);
+      if (parsed.token) {
+        tokenCookie = parsed.token;
+        break;
+      }
+    }
+  }
+
   if (!tokenCookie) {
     return next(errorHandler(401, "No token!"));
   }
 
-  const { id } = decode(tokenCookie) as { id: string | JwtPayload };
+  try {
+    const { id } = decode(tokenCookie) as { id: string | JwtPayload };
 
-  // console.log({ id });
+    const { rows } = await db.query(
+      "SELECT id, name, email FROM Users WHERE id =$1",
+      [id],
+    );
 
-  const { rows } = await db.query(
-    "SELECT id, name, email FROM Users WHERE id =$1",
-    [id]
-  );
+    if (rows.length === 0) {
+      return next(errorHandler(401));
+    }
 
-  if (rows.length == 0) {
-    next(errorHandler(401));
+    (req as unknown as UserRequest).user = rows[0];
+    (req as unknown as UserRequest).token = tokenCookie;
+
+    next();
+  } catch (error) {
+    return next(errorHandler(401, "Invalid token!"));
   }
-
-  (req as unknown as UserRequest).user = rows[0];
-
-  next();
 };
