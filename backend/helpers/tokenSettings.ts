@@ -10,8 +10,10 @@ import { CookieOptions } from "express";
 
 export const tokenSettings: CookieOptions = {
   httpOnly: true,
-  secure: true, // Wymuś true (Render i tak działa na HTTPS)
-  sameSite: "none", // Wymuś "none" dla cross-domain
+
+  secure: true, 
+  sameSite: "none", 
+
   path: "/",
   maxAge: 86400000,
 };
