@@ -21,7 +21,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://mapa-app.onrender.com",
-      "https://mapa-six-eosin.vercel.app/",
+      "https://mapa-six-eosin.vercel.app",
     ],
     credentials: true,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
