@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://onrender.com"
+      "destination": "https://mapa-app.onrender.com"
     },
     {
       "source": "/(.*)",
