@@ -1,5 +1,5 @@
 import axios from "axios";
-import api from "../../redux/api.config";
+import api, { resetAuthToken, setAuthToken } from "../../redux/api.config";
 
 export const signin = async ({
   email,
@@ -10,6 +10,8 @@ export const signin = async ({
 }) => {
   try {
     const { data } = await api.post("/auth/signin", { email, password });
+
+    setAuthToken(data.token);
 
     return data;
   } catch (error) {
@@ -33,6 +35,8 @@ export const signup = async ({
   try {
     const { data } = await api.post("/auth/signup", { name, email, password });
 
+    setAuthToken(data.token);
+
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -45,7 +49,11 @@ export const signup = async ({
 
 export const signout = async () => {
   try {
-    return (await api.post("/auth/signout")).data;
+    const data = (await api.post("/auth/signout")).data;
+
+    resetAuthToken();
+
+    return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw error.response?.data?.message;
