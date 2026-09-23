@@ -64,9 +64,12 @@ const SideMenu = ({
 
   return (
     <aside
-      className={`fixed top-0 right-0 bg-white w-3/4 z-30 md:w-[25vw] py-4 px-5 h-screen transition-all duration-300 ${
+      //   className={`fixed top-0 right-0 bg-white w-3/4 z-30 md:w-[25vw] py-4 px-5 h-screen transition-all duration-300 ${
+      //     isMenuOpen ? "translate-x-0" : "translate-x-full"
+      //   } overflow-hidden min-[1440px]:relative min-[1440px]:flex row-start-2 col-start-1 min-[1440px]:translate-x-0 flex flex-col min-[1440px]:h-full`}
+      className={`fixed top-0 right-0 bg-white w-3/4 z-30 md:w-[25vw] py-4 px-5 h-dvh flex flex-col transition-all duration-300 ${
         isMenuOpen ? "translate-x-0" : "translate-x-full"
-      } overflow-hidden min-[1440px]:relative min-[1440px]:flex row-start-2 col-start-1 min-[1440px]:translate-x-0 flex flex-col min-[1440px]:h-full`}
+      } overflow-hidden min-[1440px]:relative row-start-2 col-start-1 min-[1440px]:translate-x-0 min-[1440px]:h-full`}
       onClick={(e) => e.stopPropagation()}
     >
       <div>
