@@ -84,7 +84,7 @@ const SideMenu = ({
         </small>
       </div>
 
-      <div className="overflow-y-auto mt-5 pr-1 flex-1 grow 0 min-h-0">
+      <div className="overflow-y-auto mt-5 pr-1 flex-1 min-h-0">
         {userMarkersLoading ? (
           "Markers loading..."
         ) : (
