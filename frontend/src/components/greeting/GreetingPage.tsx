@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 const GreetingPage = () => {
   return (
-    <div className="w-full h-screen bg-orange-500 flex justify-center items-center">
+    <div className="w-full h-dvh bg-orange-500 flex justify-center items-center">
       <div className="w-4/5 bg-white p-10 rounded-2xl flex flex-col items-center gap-5">
         <h1 className="text-4xl font-bold">Mapa</h1>
         <article className="text-center">

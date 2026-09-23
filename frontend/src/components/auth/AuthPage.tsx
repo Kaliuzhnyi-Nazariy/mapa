@@ -11,8 +11,8 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-[1024px]:flex w-full min-h-screen">
-      <div className="bg-orange-500 h-screen flex justify-center items-center min-[1024px]:w-1/2">
+    <div className="min-[1024px]:flex w-full h-dvh">
+      <div className="bg-orange-500 h-dvh flex justify-center items-center min-[1024px]:w-1/2">
         <div className="bg-white p-5 rounded-2xl  grid w-4/5 min-[1024px]:p-10">
           <ul className="grid grid-cols-3 self-center justify-self-center w-full">
             <li className="w-full h-full flex justify-end">
@@ -47,7 +47,7 @@ const AuthPage = () => {
       <img
         src="https://cdn.pixabay.com/photo/2022/11/08/07/53/desk-7577945_1280.jpg"
         alt="maps"
-        className="hidden min-[1024px]:block w-1/2 h-screen object-cover object-center"
+        className="hidden min-[1024px]:block w-1/2 h-dvh object-cover object-center"
       />
     </div>
   );

@@ -40,7 +40,7 @@ const UpdatePassword = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-dvh">
       <Header link="/user" title="Update password" />
 
       <div className="flex items-center justify-center flex-1 grow">
