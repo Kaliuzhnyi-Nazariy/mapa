@@ -151,7 +151,7 @@ const MapComponent = () => {
   const userMarkersLoading = useSelector(markersLoading);
 
   return (
-    <div className="w-full h-screen overflow-hidden min-[1440px]:grid min- min-[1440px]:grid-rows-[auto_1fr]  ">
+    <div className="w-full h-dvh overflow-hidden flex flex-col min-[1440px]:grid min-[1440px]:grid-rows-[auto_1fr]">
       <Header
         isMenuOpen={isMenuOpen}
         openMenu={openMenu}

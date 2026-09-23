@@ -77,8 +77,14 @@ export const MapContainer = ({
     <>
       <div
         id="map-container"
-        className="w-full h-dvh overflow-hidden flex flex-col min-[1440px]:grid min-[1440px]:grid-rows-[auto_1fr]
-    "
+        className="
+  relative 
+  w-full flex-1
+  min-[1440px]:w-[75vw] 
+  min-[1440px]:h-[calc(100vh-88px)]
+  min-[1440px]:col-start-2 
+  min-[1440px]:row-start-2
+"
         ref={mapContainerRef}
       />
       {/* <div className="fixed top-0 left-0 w-full min-[768px]:hidden ">
