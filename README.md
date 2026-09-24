@@ -20,6 +20,22 @@ Backend
 •	Express.js
 •	TypeScript
 
+## Test accounts
+
+### First account
+
+```
+email: user_one@email.com
+password: Password1
+```
+
+### Second account
+
+```
+email: user_two@email.com
+password: Password1
+```
+
 ## Features
 - create marks on map by clicking on map
 - ability to find places near the chosen mark
