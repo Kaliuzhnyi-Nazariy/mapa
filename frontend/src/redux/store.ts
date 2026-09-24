@@ -1,21 +1,5 @@
-// import { configureStore } from "@reduxjs/toolkit";
-// import { userReducer } from "./user/slice";
-// import { markerReducer } from "./marker/slice";
-
-// const store = configureStore({
-//   reducer: {
-//     user: userReducer,
-//     markers: markerReducer,
-//   },
-// });
-
-// export default store;
-
-// export type RootState = ReturnType<typeof store.getState>;
-// export type AppDispatch = typeof store.dispatch;
-
 import { configureStore } from "@reduxjs/toolkit";
-import { userReducer } from "./user/slice";
+import { userReducer, type UserInitialState } from "./user/slice";
 import { markerReducer } from "./marker/slice";
 import storage from "redux-persist/lib/storage";
 import {
@@ -35,11 +19,9 @@ const userPersistConfig = {
   whitelist: ["token"],
 };
 
-const persistedUserReducer = persistReducer(userPersistConfig, userReducer);
-
 const store = configureStore({
   reducer: {
-    user: persistedUserReducer,
+    user: persistReducer<UserInitialState>(userPersistConfig, userReducer),
     markers: markerReducer,
   },
   middleware: (getDefaultMiddleware) =>

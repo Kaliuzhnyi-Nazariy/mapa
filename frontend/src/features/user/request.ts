@@ -1,6 +1,7 @@
 import axios from "axios";
 import type { UpdateForm } from "../../types/auth";
-import api, { resetAuthToken } from "../../redux/api.config";
+import api from // { resetAuthToken }
+"../../redux/api.config";
 import type { PasswordsType } from "../../types/user";
 
 export const updateUser = async ({ email, name }: UpdateForm) => {
@@ -47,7 +48,7 @@ export const deleteUser = async () => {
   try {
     const data = (await api.delete("/user/")).data;
 
-    resetAuthToken();
+    // resetAuthToken();
 
     return data;
   } catch (error) {

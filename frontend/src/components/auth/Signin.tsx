@@ -1,14 +1,12 @@
 // import { useState } from "react";
 import { useAppDispatch } from "../../redux/dispatch";
 import { customToast } from "../../toasts/toast";
-// import { Eye, EyeClosed } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
-import { signin } from "../../features/tanstackQuery/requests";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signinValidation } from "./validation";
 import { useNavigate } from "react-router";
-import { getMe } from "../../redux/user/userRequests";
+import { getMe, signin } from "../../redux/user/userRequests";
 import FormInput from "../Input";
 import Button from "../Button";
 
@@ -30,14 +28,20 @@ const Signin = () => {
     resolver: zodResolver(signinValidation),
   });
 
-  // const [showPassword, setShowPassword] = useState(false);
-
   const navigator = useNavigate();
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["signin"],
-    mutationFn: ({ email, password }: { email: string; password: string }) =>
-      signin({ email, password }),
+    mutationFn: async ({
+      email,
+      password,
+    }: {
+      email: string;
+      password: string;
+    }) => {
+      return await dispatch(signin({ email, password })).unwrap();
+    },
+    // signin({ email, password }),
     onSuccess: async (data: { name: string }) => {
       reset({
         email: "",
@@ -48,8 +52,11 @@ const Signin = () => {
       await dispatch(getMe());
       navigator("/map");
     },
-    onError: (err: string) => {
-      customToast("err", err);
+    onError: (err: { message: string }) => {
+      customToast(
+        "err",
+        err.message || "Invalid credentials or unexpected error",
+      );
     },
   });
 
@@ -78,13 +85,6 @@ const Signin = () => {
           error={errors.password}
         />
       </div>
-
-      {/* <button
-        className="disabled:opacity-50 mt-4 w-full py-2 bg-orange-500 text-white"
-        disabled={!isValid || isPending}
-      >
-        {isPending ? "Loading..." : "Signin"}
-      </button> */}
 
       <Button
         text={isPending ? "Loading..." : "Signin"}

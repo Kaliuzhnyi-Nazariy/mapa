@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
-import { signout } from "../../features/tanstackQuery/requests";
 import { useAppDispatch } from "../../redux/dispatch";
 import { logOut } from "../../redux/user/slice";
 import { deleteAllMarkers, getMarkers } from "../../redux/marker/request";
@@ -10,7 +9,6 @@ import { getMe } from "../../redux/user/userRequests";
 import { useSelector } from "react-redux";
 import { userEmail, username } from "../../redux/user/selectors";
 import { deleteUser } from "../../features/user/request";
-// import { removeAllMarkersFromMap } from "../Map/useMap";
 
 const User = () => {
   const navigate = useNavigate();
@@ -29,13 +27,16 @@ const User = () => {
   const buttonStyle = `text-start border rounded-md border-orange-500 p-2 hover:bg-orange-500/50 hover:text-white hover:cursor-pointer transition-all `;
 
   const { mutate, isPending } = useMutation({
-    mutationFn: signout,
-    onSuccess() {
+    mutationKey: ["logout"],
+    mutationFn: async () => {
+      return true;
+    },
+    onSuccess: () => {
       dispatch(logOut());
       navigate("/");
     },
-    onError: (error) => {
-      console.error("Signout failed:", error);
+    onError: (err: { message?: string }) => {
+      console.error("err", err.message || "Signout failed");
     },
   });
 

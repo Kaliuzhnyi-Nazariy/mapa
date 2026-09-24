@@ -1,145 +1,18 @@
-// import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-// // import { signin, signout, signup } from "./authRequests";
-// import { getMe } from "./userRequests";
-
-// interface UserInitialState {
-//   user: {
-//     name: string | null;
-//     email: string | null;
-//   };
-//   isLoading: boolean;
-//   isLoggedIn: boolean;
-//   error: string | null;
-//   isRefreshing: boolean;
-// }
-
-// // const initialState: UserInitialState = {
-// //   user: {
-// //     name: null,
-// //     email: null,
-// //   },
-// //   isLoading: false,
-// //   isLoggedIn: false,
-// //   error: null,
-// //   isRefreshing: false,
-// // };
-// const initialState: UserInitialState = {
-//   user: {
-//     name: null,
-//     email: null,
-//   },
-//   isLoading: false,
-//   isLoggedIn: false,
-//   error: null,
-//   isRefreshing: true,
-// };
-
-// // const pendingHandler = (state: UserInitialState) => {
-// //   state.error = null;
-// //   state.isLoading = true;
-// // };
-
-// // const rejectionHandler = (
-// //   state: UserInitialState,
-// //   action: PayloadAction<{ message: string } | undefined>,
-// // ) => {
-// //   state.isLoading = false;
-// //   state.error = action.payload?.message ?? "Unexpected error occurred";
-// // };
-
-// const userSlice = createSlice({
-//   name: "user",
-//   initialState,
-//   reducers: {
-//     logOut: (state) => {
-//       state.user = { name: null, email: null };
-//       state.isLoggedIn = false;
-//       state.isRefreshing = false;
-//       state.error = null;
-//     },
-//   },
-//   extraReducers(builder) {
-//     builder
-//       // .addCase(signup.pending, pendingHandler)
-//       // .addCase(
-//       //   signup.fulfilled,
-//       //   (
-//       //     state: UserInitialState,
-//       //     action: PayloadAction<{ name: string; email: string }>
-//       //   ) => {
-//       //     state.isLoading = false;
-//       //     state.isLoggedIn = true;
-//       //     state.user = action.payload;
-//       //   }
-//       // )
-//       // .addCase(signup.rejected, rejectionHandler)
-
-//       // .addCase(signin.pending, pendingHandler)
-//       // .addCase(
-//       //   signin.fulfilled,
-//       //   (
-//       //     state: UserInitialState,
-//       //     action: PayloadAction<{ name: string; email: string }>
-//       //   ) => {
-//       //     state.isLoading = false;
-//       //     state.isLoggedIn = true;
-//       //     state.user = action.payload;
-//       //   }
-//       // )
-//       // .addCase(signin.rejected, rejectionHandler)
-
-//       // .addCase(signout.pending, pendingHandler)
-//       // .addCase(signout.fulfilled, (state: UserInitialState) => {
-//       //   state.user = initialState.user;
-//       //   state.isLoading = initialState.isLoading;
-//       //   state.isLoggedIn = initialState.isLoggedIn;
-//       // })
-//       // .addCase(signout.rejected, rejectionHandler)
-
-//       .addCase(getMe.pending, (state: UserInitialState) => {
-//         state.isRefreshing = true;
-//       })
-//       .addCase(
-//         getMe.fulfilled,
-//         (
-//           state: UserInitialState,
-//           action: PayloadAction<{ name: string; email: string }>,
-//         ) => {
-//           // console.log(action.payload);
-//           state.user = action.payload;
-//           state.isRefreshing = false;
-//           state.isLoggedIn = true;
-//         },
-//       )
-//       .addCase(
-//         getMe.rejected,
-//         (
-//           state: UserInitialState,
-//           action: PayloadAction<{ message: string } | undefined>,
-//         ) => {
-//           state.isRefreshing = false;
-//           state.error = action.payload?.message ?? "Unexpected error occurred";
-//         },
-//       );
-//   },
-// });
-
-// export const { logOut } = userSlice.actions;
-// export const userReducer = userSlice.reducer;
-
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { getMe } from "./userRequests";
+import { getMe, signin, signup } from "./userRequests";
+import { handleLoading } from "../sliceHelpers";
+import type { ReturnUser, ReturnUserAuth } from "./userTypes";
 
-interface UserInitialState {
+export interface UserInitialState {
   user: {
     name: string | null;
     email: string | null;
   };
-  token: string | null;
   isLoading: boolean;
   isLoggedIn: boolean;
   error: string | null;
   isRefreshing: boolean;
+  token: null | string;
 }
 
 const initialState: UserInitialState = {
@@ -147,16 +20,16 @@ const initialState: UserInitialState = {
     name: null,
     email: null,
   },
-  token: null,
   isLoading: false,
   isLoggedIn: false,
   error: null,
   isRefreshing: true,
+  token: null,
 };
 
 const userSlice = createSlice({
-  name: "user",
   initialState,
+  name: "user",
   reducers: {
     logOut: (state) => {
       state.user = { name: null, email: null };
@@ -168,29 +41,60 @@ const userSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(getMe.pending, (state: UserInitialState) => {
-        state.isRefreshing = true;
-      })
+      .addCase(signup.pending, handleLoading)
       .addCase(
-        getMe.fulfilled,
-        (
-          state: UserInitialState,
-          action: PayloadAction<{ name: string; email: string }>,
-        ) => {
-          state.user = action.payload;
-          state.isRefreshing = false;
+        signup.fulfilled,
+        (state, action: PayloadAction<ReturnUserAuth>) => {
+          state.token = action.payload.token;
+          state.user.name = action.payload.name;
           state.isLoggedIn = true;
+          state.isLoading = false;
         },
       )
       .addCase(
-        getMe.rejected,
-        (
-          state: UserInitialState,
-          action: PayloadAction<{ message: string } | undefined>,
-        ) => {
-          state.token = null;
+        signup.rejected,
+        (state, action: PayloadAction<{ message: string } | undefined>) => {
+          state.isLoggedIn = false;
           state.isRefreshing = false;
-          state.error = action.payload?.message ?? "Unexpected error occurred";
+          state.error = action.payload?.message ?? "Error occured";
+          state.isLoading = false;
+        },
+      )
+
+      .addCase(signin.pending, handleLoading)
+      .addCase(
+        signin.fulfilled,
+        (state, action: PayloadAction<ReturnUserAuth>) => {
+          state.token = action.payload.token;
+          state.user.name = action.payload.name;
+          state.isLoggedIn = true;
+          state.isLoading = false;
+        },
+      )
+      .addCase(
+        signin.rejected,
+        (state, action: PayloadAction<{ message: string } | undefined>) => {
+          state.isLoggedIn = false;
+          state.isRefreshing = false;
+          state.error = action.payload?.message ?? "Error occured";
+          state.isLoading = false;
+        },
+      )
+
+      .addCase(getMe.pending, handleLoading)
+      .addCase(getMe.fulfilled, (state, action: PayloadAction<ReturnUser>) => {
+        state.user.name = action.payload.name;
+        state.user.email = action.payload.email;
+        state.isLoggedIn = true;
+        state.isLoading = false;
+      })
+      .addCase(
+        getMe.rejected,
+        (state, action: PayloadAction<{ message: string } | undefined>) => {
+          state.isLoggedIn = false;
+          state.isRefreshing = false;
+          state.error = action.payload?.message ?? "Error occured";
+          state.isLoading = false;
         },
       );
   },

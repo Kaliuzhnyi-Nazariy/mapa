@@ -3,6 +3,11 @@ export interface ReturnUser {
   email: string;
 }
 
+export interface ReturnUserAuth {
+  name: string;
+  token: string;
+}
+
 export interface SignInUser {
   email: string;
   password: string;
